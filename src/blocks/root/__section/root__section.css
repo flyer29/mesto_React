@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'Inter-Regular';
+  src: url(../../../vendor/fonts/Inter-Regular.woff2) format('woff');
+}
+
+.root__section {
+  font-family: 'Inter-Regular', sans-serif;
+  width: calc(100% - 400px);
+  margin: auto;
+}
+
+@media screen and (max-width: 980px) {
+  .root__section {
+    width: 90%;
+  }
+}
