@@ -1,16 +1,34 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import Api from '../utils/api';
 
 function Main(props) {
+  const[userName, setUserName] = React.useState('');
+  const[userDescription, setUserDescription] = React.useState('');
+  const[userAvatar, setUserAvatar] = React.useState('');
+
+  React.useEffect(() => {
+    Api.getUserData()
+      .then((data) => {
+        setUserName(data.name);
+        setUserDescription(data.about);
+        setUserAvatar(data.avatar);
+      })
+      .catch((error) => {
+        alert(error);
+      })
+  })
+
   return(
     <>
       <div className="profile root__section">
         <div className="user-info">
-          <div className="user-info__photo" onClick={props.onEditAvatar}></div>
+          <div className="user-info__photo" onClick={props.onEditAvatar} style={{ backgroundImage: `url(${userAvatar})` }}>
+          </div>
           <div className="user-info__data">
-            <h1 className="user-info__name">Жак-Ив Кусто</h1>
-            <p className="user-info__job">Исследователь океана</p>
+            <h1 className="user-info__name">{userName}</h1>
+            <p className="user-info__job">{userDescription}</p>
             <button className="button user-info__edit-button" onClick={props.onEditProfile}>Edit</button>
           </div>
           <button className="button user-info__button" onClick={props.onAddPlace}>+</button>
