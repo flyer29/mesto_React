@@ -21,17 +21,24 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  function closeAllPopups() {
+    setIsEditProfilePopupOpen(false);
+    setiIsEditAvatarPopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+  }
+
   return (
     <>
-    <Header />
-    <Main
-      onEditProfile={handleEditProfileClick}
-      onAddPlace={handleAddPlaceClick}
-      onEditAvatar={handleEditAvatarClick}
-      isOpenProfilePopup={isEditProfilePopupOpen}
-      isOpenPlacePopup={isAddPlacePopupOpen}
-      isOpenAvatarPopup={isEditAvatarPopupOpen}
-     />
+      <Header />
+      <Main
+        onEditProfile={handleEditProfileClick}
+        onAddPlace={handleAddPlaceClick}
+        onEditAvatar={handleEditAvatarClick}
+        isOpenProfilePopup={isEditProfilePopupOpen}
+        isOpenPlacePopup={isAddPlacePopupOpen}
+        isOpenAvatarPopup={isEditAvatarPopupOpen}
+        closePopups={closeAllPopups}
+      />
     </>
   );
 }
