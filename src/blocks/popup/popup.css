@@ -9,7 +9,13 @@
 @import url(./__error/popup__error.css);
 @import url(./__content/_type_image/popup__content_type_image.css);
 
+@font-face {
+  font-family: 'Inter-Regular';
+  src: url(../../vendor/fonts/Inter-Regular.woff2) format('woff');
+}
+
 .popup {
+  font-family: 'Inter-Regular', sans-serif;
   position: fixed;
   top: 0;
   left: 0;
