@@ -1,12 +1,14 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import Card from './Card';
 import Api from '../utils/api';
 
 function Main(props) {
-  const[userName, setUserName] = React.useState('');
-  const[userDescription, setUserDescription] = React.useState('');
-  const[userAvatar, setUserAvatar] = React.useState('');
+  const [userName, setUserName] = React.useState('');
+  const [userDescription, setUserDescription] = React.useState('');
+  const [userAvatar, setUserAvatar] = React.useState('');
+  const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
     Api.getUserData()
@@ -17,6 +19,13 @@ function Main(props) {
       })
       .catch((error) => {
         alert(error);
+      });
+  })
+
+  React.useEffect(() => {
+    Api.getInitialCards()
+      .then((data) => {
+        setCards([...data]);
       })
   })
 
@@ -34,7 +43,13 @@ function Main(props) {
           <button className="button user-info__button" onClick={props.onAddPlace}>+</button>
         </div>
       </div>
-      <div className="places-list root__section"></div>
+      <div className="places-list root__section">
+        {cards.map((card) => {
+          return(
+            <Card card={card} key={card._id}/>
+          )
+        })}
+      </div>
       <PopupWithForm title="Новое место" name="place" isOpen={props.isOpenPlacePopup} onClose={props.closePopups}>
         <input type="text" name="placename" className="popup__input popup__input_type_name" placeholder="Название" required={true} minLength="2" maxLength="30"/>
         <span id="name-error" className="popup__error"></span>
