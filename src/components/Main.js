@@ -2,7 +2,7 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import Card from './Card';
-import Api from '../utils/api';
+import api from '../utils/api';
 
 function Main(props) {
   const [userName, setUserName] = React.useState('');
@@ -11,25 +11,28 @@ function Main(props) {
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-    Api.getUserData()
+    api.getUserData()
       .then((data) => {
         setUserName(data.name);
         setUserDescription(data.about);
         setUserAvatar(data.avatar);
       })
       .catch((error) => {
-        alert(error);
+        throw error;
       });
-  })
+  });
 
   React.useEffect(() => {
-    Api.getInitialCards()
+    api.getInitialCards()
       .then((data) => {
         setCards([...data]);
       })
-  })
+      .catch((error) => {
+        throw error;
+      });
+  });
 
-  return(
+  return (
     <>
       <div className="profile root__section">
         <div className="user-info">
@@ -44,34 +47,48 @@ function Main(props) {
         </div>
       </div>
       <div className="places-list root__section">
-        {cards.map((card) => {
-          return(
-            <Card card={card} key={card._id}/>
-          )
-        })}
+        {cards.map((card) => (
+            <Card card={card} key={card._id} onCardClick={props.onCardClick} />
+        ))}
       </div>
-      <PopupWithForm title="Новое место" name="place" isOpen={props.isOpenPlacePopup} onClose={props.closePopups}>
-        <input type="text" name="placename" className="popup__input popup__input_type_name" placeholder="Название" required={true} minLength="2" maxLength="30"/>
-        <span id="name-error" className="popup__error"></span>
-        <input type="url" name="link" className="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" required={true}/>
-        <span id="link-error" className="popup__error"></span>
-        <button id="place-button" className="button popup__button ">+</button>
+      <PopupWithForm
+        title="Новое место"
+        name="place"
+        isOpen={props.isOpenPlacePopup}
+        onClose={props.closePopups}>
+          <input type="text" name="placename" className="popup__input popup__input_type_name" placeholder="Название" required={true} minLength="2" maxLength="30"/>
+          <span id="name-error" className="popup__error"></span>
+          <input type="url" name="link" className="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" required={true}/>
+          <span id="link-error" className="popup__error"></span>
+          <button id="place-button" className="button popup__button ">+</button>
       </PopupWithForm>
-      <PopupWithForm title="Редактировать профиль" name="profile" isOpen={props.isOpenProfilePopup} onClose={props.closePopups}>
+      <PopupWithForm
+        title="Редактировать профиль"
+        name="profile"
+        isOpen={props.isOpenProfilePopup}
+        onClose={props.closePopups}>
         <input type="text" name="username" className="popup__input popup__input_type_name" placeholder="Имя" minLength="2" maxLength="30" required={true}/>
         <span id="username-error" className="popup__error"></span>
         <input type="text" name="about" className="popup__input popup__input_type_about" placeholder="О себе" minLength="2" maxLength="30" required={true}/>
         <span id="about-error" className="popup__error"></span>
         <button id="profile-button" className="button popup__button popup__button_type_profile">Сохранить</button>
       </PopupWithForm>
-      <PopupWithForm title="Обновить аватар" name="avatar" isOpen={props.isOpenAvatarPopup} onClose={props.closePopups}>
+      <PopupWithForm
+        title="Обновить аватар"
+        name="avatar"
+        isOpen={props.isOpenAvatarPopup}
+        onClose={props.closePopups}>
         <input type="url" name="avatarlikn" className="popup__input popup__input_type_avatar" placeholder="Ссылка на аватар" required={true}/>
         <span id="avatar-error" className="popup__error"></span>
         <button id="avatar-button" className="button popup__button popup__button_type_profile">Сохранить</button>
       </PopupWithForm>
-      <ImagePopup/>
+      <ImagePopup
+        isOpen={props.isOpenImagePopup}
+        card={props.card}
+        onClose={props.closePopups}
+      />
     </>
-  )
+  );
 }
 
 export default Main;

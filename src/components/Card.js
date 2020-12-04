@@ -1,7 +1,13 @@
+import React from 'react';
+
 function Card(props) {
-  return(
+  function handleCardClick() {
+    return props.onCardClick(props.card);
+  }
+
+  return (
     <div className="place-card">
-      <div className="place-card__image" style={{ backgroundImage: `url(${props.card.link})`}}>
+      <div className="place-card__image" onClick={handleCardClick} style={ { backgroundImage: `url(${props.card.link})` } }>
         <button className="place-card__delete-icon"></button>
       </div>
       <div className="place-card__description">
