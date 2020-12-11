@@ -3,24 +3,11 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import Card from './Card';
 import api from '../utils/api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main(props) {
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
+  const currentUser = React.useContext(CurrentUserContext);
   const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    api.getUserData()
-      .then((data) => {
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
-      })
-      .catch((error) => {
-        throw error;
-      });
-  });
 
   React.useEffect(() => {
     api.getInitialCards()
@@ -32,15 +19,28 @@ function Main(props) {
       });
   });
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+    api.changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+        setCards([...newCards]);
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
   return (
     <>
       <div className="profile root__section">
         <div className="user-info">
-          <div className="user-info__photo" onClick={props.onEditAvatar} style={{ backgroundImage: `url(${userAvatar})` }}>
+          <div className="user-info__photo" onClick={props.onEditAvatar} style={{ backgroundImage: `url(${currentUser.avatar})` }}>
           </div>
           <div className="user-info__data">
-            <h1 className="user-info__name">{userName}</h1>
-            <p className="user-info__job">{userDescription}</p>
+            <h1 className="user-info__name">{currentUser.name}</h1>
+            <p className="user-info__job">{currentUser.about}</p>
             <button className="button user-info__edit-button" onClick={props.onEditProfile}>Edit</button>
           </div>
           <button className="button user-info__button" onClick={props.onAddPlace}>+</button>
@@ -48,7 +48,9 @@ function Main(props) {
       </div>
       <div className="places-list root__section">
         {cards.map((card) => (
-            <Card card={card} key={card._id} onCardClick={props.onCardClick} />
+          <CurrentUserContext.Provider value={currentUser}>
+            <Card card={card} key={card._id} onCardClick={props.onCardClick} onCardLike={handleCardLike} />
+          </CurrentUserContext.Provider>
         ))}
       </div>
       <PopupWithForm
