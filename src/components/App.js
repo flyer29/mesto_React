@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import Main from './Main';
+import EditProfilePopup from './EditProfilePopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -20,7 +21,7 @@ function App() {
       .catch((error) => {
         throw error;
       });
-  });
+  }, []);
 
   function editUser(user) {
     setCurrentUser(user);
@@ -59,13 +60,13 @@ function App() {
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
         onCardClick={handleCardClick}
-        isOpenProfilePopup={isEditProfilePopupOpen}
         isOpenPlacePopup={isAddPlacePopupOpen}
         isOpenAvatarPopup={isEditAvatarPopupOpen}
         isOpenImagePopup={isImagePopupOpen}
         card={selectedCard}
         closePopups={closeAllPopups}
       />
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
     </CurrentUserContext.Provider>
   );
 }

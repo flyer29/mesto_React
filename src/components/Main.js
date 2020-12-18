@@ -17,7 +17,7 @@ function Main(props) {
       .catch((error) => {
         throw error;
       });
-  });
+  }, []);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -48,9 +48,7 @@ function Main(props) {
       </div>
       <div className="places-list root__section">
         {cards.map((card) => (
-          <CurrentUserContext.Provider value={currentUser}>
             <Card card={card} key={card._id} onCardClick={props.onCardClick} onCardLike={handleCardLike} />
-          </CurrentUserContext.Provider>
         ))}
       </div>
       <PopupWithForm
@@ -63,17 +61,6 @@ function Main(props) {
           <input type="url" name="link" className="popup__input popup__input_type_link-url" placeholder="Ссылка на картинку" required={true}/>
           <span id="link-error" className="popup__error"></span>
           <button id="place-button" className="button popup__button ">+</button>
-      </PopupWithForm>
-      <PopupWithForm
-        title="Редактировать профиль"
-        name="profile"
-        isOpen={props.isOpenProfilePopup}
-        onClose={props.closePopups}>
-        <input type="text" name="username" className="popup__input popup__input_type_name" placeholder="Имя" minLength="2" maxLength="30" required={true}/>
-        <span id="username-error" className="popup__error"></span>
-        <input type="text" name="about" className="popup__input popup__input_type_about" placeholder="О себе" minLength="2" maxLength="30" required={true}/>
-        <span id="about-error" className="popup__error"></span>
-        <button id="profile-button" className="button popup__button popup__button_type_profile">Сохранить</button>
       </PopupWithForm>
       <PopupWithForm
         title="Обновить аватар"
