@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Main from './Main';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -25,6 +26,32 @@ function App() {
 
   function editUser(user) {
     setCurrentUser(user);
+  }
+
+  function handleUpdateUser(user) {
+    api.editUserProfile(user)
+      .then((data) => {
+        editUser(data);
+      })
+      .then(() => {
+        closeAllPopups();
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  function handleUpdateAvatar (avatar) {
+    api.editUserAvatar(avatar)
+      .then((data) => {
+        editUser(data);
+      })
+      .then(() => {
+        closeAllPopups();
+      })
+      .catch((error) => {
+        throw error;
+      });
   }
 
   function handleEditProfileClick() {
@@ -61,12 +88,12 @@ function App() {
         onEditAvatar={handleEditAvatarClick}
         onCardClick={handleCardClick}
         isOpenPlacePopup={isAddPlacePopupOpen}
-        isOpenAvatarPopup={isEditAvatarPopupOpen}
         isOpenImagePopup={isImagePopupOpen}
         card={selectedCard}
         closePopups={closeAllPopups}
       />
-      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+      <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
     </CurrentUserContext.Provider>
   );
 }
