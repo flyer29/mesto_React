@@ -9,6 +9,7 @@
 @import url(./__likes-number/place-card__likes-number.css);
 
 .place-card {
+  position: relative;
   width: 282px;
   background-color: #fff;
   border-radius: 10px;
