@@ -1,5 +1,4 @@
 import React from 'react';
-import ImagePopup from './ImagePopup';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -31,11 +30,7 @@ function Main(props) {
             />
         ))}
       </div>
-      <ImagePopup
-        isOpen={props.isOpenImagePopup}
-        card={props.card}
-        onClose={props.closePopups}
-      />
+
     </>
   );
 }

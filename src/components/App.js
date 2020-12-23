@@ -4,6 +4,7 @@ import Main from './Main';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import ImagePopup from './ImagePopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -20,6 +21,16 @@ function App() {
     api.getUserData()
       .then((data) => {
         editUser(data);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }, []);
+
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then((data) => {
+        setCards([...data]);
       })
       .catch((error) => {
         throw error;
@@ -64,20 +75,6 @@ function App() {
       });
   }
 
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then((data) => {
-        setCards([...data]);
-      })
-      .catch((error) => {
-        throw error;
-      });
-  }, []);
-
-  function editUser(user) {
-    setCurrentUser(user);
-  }
-
   function handleUpdateUser(user) {
     api.editUserProfile(user)
       .then((data) => {
@@ -102,6 +99,10 @@ function App() {
       .catch((error) => {
         throw error;
       });
+  }
+
+  function editUser(user) {
+    setCurrentUser(user);
   }
 
   function handleEditProfileClick() {
@@ -139,14 +140,13 @@ function App() {
         onCardClick={handleCardClick}
         onCardLike={handleCardLike}
         onCardDelete={handleCardDelete}
-        isOpenImagePopup={isImagePopupOpen}
-        card={selectedCard}
         closePopups={closeAllPopups}
         cards={cards}
       />
       <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace}/>
       <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
       <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
+      <ImagePopup isOpen={isImagePopupOpen} onClose={closeAllPopups} card={selectedCard}/>
     </CurrentUserContext.Provider>
   );
 }
