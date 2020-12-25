@@ -1,4 +1,5 @@
 # Getting Started with Create React App
+# The project is always available on GitHubPages https://flyer29.github.io/mesto_React/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
